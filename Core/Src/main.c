@@ -101,10 +101,23 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    /*Toogle the state of the green led and waits for 500 ms*/
-    HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin); 
-    HAL_Delay(500);
-
+    /*Read the status of the push button*/
+    if (GPIO_PIN_RESET == HAL_GPIO_ReadPin(Button_1_GPIO_Port, Button_1_Pin))
+    {
+      /*Wait for debounce*/
+      HAL_Delay(20);
+      /*Check the status of the push button again*/
+      if (GPIO_PIN_RESET == HAL_GPIO_ReadPin(Button_1_GPIO_Port, Button_1_Pin))
+      {
+        /* If Button_1 is pressed, toogle the state of the led */
+        HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+      }
+      /*Wait for the push button to be released*/
+      while (GPIO_PIN_RESET == HAL_GPIO_ReadPin(Button_1_GPIO_Port, Button_1_Pin))
+      {
+        /* Do nothing, just wait */
+      }
+    }
   }
   /* USER CODE END 3 */
 }
@@ -216,6 +229,12 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : Button_1_Pin */
+  GPIO_InitStruct.Pin = Button_1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Button_1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LED_GREEN_Pin */
   GPIO_InitStruct.Pin = LED_GREEN_Pin;
