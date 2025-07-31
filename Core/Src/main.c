@@ -100,6 +100,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+    /*Toogle the state of the green led and waits for 500 ms*/
+    HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin); 
+    HAL_Delay(500);
+
   }
   /* USER CODE END 3 */
 }
